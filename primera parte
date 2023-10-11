@@ -1,0 +1,248 @@
+//Emiliano Daniel Barrio Maurich 1B
+//PARTE 1° PARCIAL 
+
+#define LED_A 7
+#define LED_B 8
+#define LED_C 9
+#define LED_D 10
+#define LED_E 11
+#define LED_G 12
+#define LED_F 13
+#define BOTON_SUBE 6
+#define BOTON_BAJA 5
+#define BOTON_RESET 4
+#define UNIDAD A5
+#define DECENA A4
+#define APAGADOS 0
+
+int sube = 1;
+int subePrevia = 1;
+int baja = 1;
+int bajaPrevia = 1;
+int reset = 1;
+int resetPrevia = 1;
+int contador = 0;
+
+void setup()
+{
+  pinMode(LED_A, OUTPUT);
+  pinMode(LED_B, OUTPUT);
+  pinMode(LED_C, OUTPUT);
+  pinMode(LED_D, OUTPUT);
+  pinMode(LED_E, OUTPUT);
+  pinMode(LED_F, OUTPUT);
+  pinMode(LED_G, OUTPUT);
+  pinMode(UNIDAD, OUTPUT);
+  pinMode(DECENA, OUTPUT);
+  pinMode(BOTON_SUBE, INPUT_PULLUP);
+  pinMode(BOTON_BAJA, INPUT_PULLUP);
+  pinMode(BOTON_RESET, INPUT_PULLUP);
+}
+
+void loop()
+{
+  int boton = keypressed(BOTON_SUBE, BOTON_BAJA, BOTON_RESET);
+  
+  if(boton == BOTON_SUBE)
+  {
+    contador++;
+    
+    if(contador > 99)
+    {
+      contador = 0;
+    }
+  }
+  
+  if(boton == BOTON_BAJA)
+  {
+    contador--;
+    
+    if(contador < 0)
+    {
+      contador = 99;
+    }
+  }
+     
+  if(boton == BOTON_RESET)
+  {
+    contador = 0;
+  }
+  
+  prenderContador(contador);
+}
+
+void prenderNumero(int numero)
+{
+  digitalWrite(LED_A, LOW);
+  digitalWrite(LED_B, LOW);
+  digitalWrite(LED_C, LOW);
+  digitalWrite(LED_D, LOW);
+  digitalWrite(LED_E, LOW);
+  digitalWrite(LED_F, LOW);
+  digitalWrite(LED_G, LOW);
+  
+  switch(numero)
+  {
+    case(0):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_E, HIGH);
+      digitalWrite(LED_F, HIGH);
+      break;
+    }
+    case(1):
+    {
+      digitalWrite(LED_B, HIGH);
+  	  digitalWrite(LED_C, HIGH);
+      break;
+    }
+    case(2):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_E, HIGH);
+      digitalWrite(LED_G, HIGH);
+      break;
+    }
+    case(3):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_G, HIGH);
+      break;
+    }
+    case(4):
+    {
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_F, HIGH);
+      digitalWrite(LED_G, HIGH);
+      break;
+    }
+    case(5):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_F, HIGH);
+      digitalWrite(LED_G, HIGH);
+      break;
+    }
+    case(6):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_E, HIGH);
+      digitalWrite(LED_F, HIGH);
+      digitalWrite(LED_G, HIGH); 
+      break;
+    }
+    case(7):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      break;
+    }
+    case(8):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_E, HIGH);
+      digitalWrite(LED_F, HIGH);
+      digitalWrite(LED_G, HIGH);
+      break;
+    }
+    case(9):
+    {
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_D, HIGH);
+      digitalWrite(LED_F, HIGH);
+      digitalWrite(LED_G, HIGH);
+      break;
+    }
+  }
+}
+
+void prenderContador(int contador)
+{
+  int decena = contador/10;
+  int unidad = contador - 10*((int)contador/10);
+  
+  prender_Uni_Dec(APAGADOS);
+  prenderNumero(decena);
+  prender_Uni_Dec(DECENA);
+  prender_Uni_Dec(APAGADOS);
+  prenderNumero(unidad);
+  prender_Uni_Dec(UNIDAD);
+}
+  
+
+int keypressed(int boton_sube, int boton_baja, int boton_reset)
+{
+  sube=digitalRead(boton_sube);
+  baja=digitalRead(boton_baja);
+  reset=digitalRead(boton_reset);
+  
+  if(sube)
+    subePrevia=1;
+  if(baja)
+    bajaPrevia=1;
+  if(reset)
+    resetPrevia=1;
+  
+  if(sube == 0 && sube != subePrevia)
+  {
+    subePrevia = sube;
+    return boton_sube;
+  }
+  
+  if(baja == 0 && baja != bajaPrevia)
+  {
+    bajaPrevia = baja;
+    return boton_baja;
+  }
+  
+  if(reset == 0 && reset != resetPrevia)
+  {
+    resetPrevia = reset;
+    return boton_reset;
+  }
+  
+  return 0;
+}
+  
+void prender_Uni_Dec(int digito)
+{
+  if(digito == UNIDAD)
+  {
+    digitalWrite(UNIDAD, LOW);
+    digitalWrite(DECENA, HIGH);
+    delay(10);
+  }
+  else if(digito == DECENA)
+  {
+    digitalWrite(DECENA, LOW);
+    digitalWrite(UNIDAD, HIGH);
+    delay(10);
+  }
+  else
+  {
+    digitalWrite(DECENA, HIGH);
+    digitalWrite(UNIDAD, HIGH);
+  }
+}
+
+    
+    
