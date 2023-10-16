@@ -43,7 +43,7 @@ void loop()
 {
   int boton = keypressed(BOTON_SUBE, BOTON_BAJA, BOTON_RESET);
   
-  if(boton == BOTON_SUBE)
+  if(boton == BOTON_SUBE)//SI SE PRESIONA ESTE PULSADOR EL CONTADOR SUBE. SI EL MISMO LLEGA A 99 Y LO SUPERA SE REINICIA A 0.
   {
     contador++;
     
@@ -53,7 +53,7 @@ void loop()
     }
   }
   
-  if(boton == BOTON_BAJA)
+  if(boton == BOTON_BAJA)//SI SE PRESIONA ESTE PULSADOR EL CONTADOR BAJA. SI EL MISMO LLEGA A 0 Y LO SUPERA EL CONTADOR SE VUELVE 99.
   {
     contador--;
     
@@ -63,7 +63,7 @@ void loop()
     }
   }
      
-  if(boton == BOTON_RESET)
+  if(boton == BOTON_RESET)//REINICIA EL CONTADOR A 0.
   {
     contador = 0;
   }
@@ -71,7 +71,7 @@ void loop()
   prenderContador(contador);
 }
 
-void prenderNumero(int numero)
+void prenderNumero(int numero)//LA FUNCION RECIBE POR PARAMETRO UN NUMERO Y SE ENCARGA DE ENCENDER LOS LEDS NECESARIOS PARA REPLICAR ESE NUMERO.
 {
   digitalWrite(LED_A, LOW);
   digitalWrite(LED_B, LOW);
@@ -175,10 +175,10 @@ void prenderNumero(int numero)
   }
 }
 
-void prenderContador(int contador)
+void prenderContador(int contador)//LA FUNCION RECIBE UN NUMERO, QUE PUEDE SER DE DOS CIFRAS, Y HACIENDO USO DE OTRAS FUNCIONES ENCIENDE LOS LEDS PARA FORMAR ESE NUMERO E INDICA SI SE DEBE PRENDER EL DISPLAY DE LAS UNIDADE O DE LAS DECENAS.
 {
-  int decena = contador/10;
-  int unidad = contador - 10*((int)contador/10);
+  int decena = contador/10;//TRANSFORMA EL NUMERO RECIBIDO EN DECENA.
+  int unidad = contador - 10*((int)contador/10);//TRANSFORMA EL NUMERO RECIBIDO EN UNIDAD.
   
   prender_Uni_Dec(APAGADOS);
   prenderNumero(decena);
@@ -189,7 +189,7 @@ void prenderContador(int contador)
 }
   
 
-int keypressed(int boton_sube, int boton_baja, int boton_reset)
+int keypressed(int boton_sube, int boton_baja, int boton_reset)//LA FUNCION INDICA SI UN PULSADOR SE MANTUVO PRESIONADO. 
 {
   sube=digitalRead(boton_sube);
   baja=digitalRead(boton_baja);
@@ -223,7 +223,7 @@ int keypressed(int boton_sube, int boton_baja, int boton_reset)
   return 0;
 }
   
-void prender_Uni_Dec(int digito)
+void prender_Uni_Dec(int digito)//LA FUNCIO RECIBE POR PARAMETRO SI EN NUMERO QUE DEBE ENCENDERSE ES UNA UNIDAD O UNA DECENA, LOS MISMOS SE ENCIENDEN CADA 10 MILISEGUNDOS POR LO QUE DA LA SENSACION DE QUE ESTAN PRENDIDOS AL MISMO TIEMPO.
 {
   if(digito == UNIDAD)
   {
